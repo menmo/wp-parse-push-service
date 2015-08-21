@@ -3,125 +3,125 @@
     /////////////////////////////
     // Working with Parameters //
     /////////////////////////////
-    if(isset( $_POST['simpar_hidden'] ) && ( $_POST['simpar_hidden'] == 'Y' )) {  
+    if(isset( $_POST['pps_hidden'] ) && ( $_POST['pps_hidden'] == 'Y' )) {  
         //Form data sent 
-        $sppsAppName = $_POST['simpar_appName'];  
-        update_option('simpar_appName', $sppsAppName); 
+        $sppsAppName = $_POST['pps_appName'];  
+        update_option('pps_appName', $sppsAppName); 
 
-        $sppsAppID = $_POST['simpar_appID'];  
-        update_option('simpar_appID', $sppsAppID);  
+        $sppsAppID = $_POST['pps_appID'];  
+        update_option('pps_appID', $sppsAppID);  
           
-        $sppsRestApi = $_POST['simpar_restApi'];  
-        update_option('simpar_restApi', $sppsRestApi); 
+        $sppsRestApi = $_POST['pps_restApi'];  
+        update_option('pps_restApi', $sppsRestApi); 
 
         $sppsAutoSendTitle = '';
-        if (isset($_POST['simpar_autoSendTitle'])) {  
-        	update_option('simpar_autoSendTitle', 'true');
+        if (isset($_POST['pps_autoSendTitle'])) {  
+        	update_option('pps_autoSendTitle', 'true');
         	$sppsAutoSendTitle = ' checked="checked"';
         }
         else
-        	update_option('simpar_autoSendTitle', 'false');
+        	update_option('pps_autoSendTitle', 'false');
 
         $sppsIncludePostID = '';
-        if (isset($_POST['simpar_includePostID'])) {
-            update_option('simpar_includePostID', 'true');
+        if (isset($_POST['pps_includePostID'])) {
+            update_option('pps_includePostID', 'true');
             $sppsIncludePostID = ' checked="checked"';
         }
         else
-            update_option('simpar_includePostID', 'false');
+            update_option('pps_includePostID', 'false');
 
 
         $sppsDiscardScheduledPosts = '';
-        if (isset($_POST['simpar_discardScheduledPosts'])) {
-            update_option('simpar_discardScheduledPosts', 'true');
+        if (isset($_POST['pps_discardScheduledPosts'])) {
+            update_option('pps_discardScheduledPosts', 'true');
             $sppsDiscardScheduledPosts = ' checked="checked"';
         }
         else
-            update_option('simpar_discardScheduledPosts', 'false');
+            update_option('pps_discardScheduledPosts', 'false');
 
 
         $sppsSaveLastMessage = '';
-        if (isset($_POST['simpar_saveLastMessage'])) {  
-            update_option('simpar_saveLastMessage', 'true');
+        if (isset($_POST['pps_saveLastMessage'])) {  
+            update_option('pps_saveLastMessage', 'true');
             $sppsSaveLastMessage = ' checked="checked"';
         }
         else
-            update_option('simpar_saveLastMessage', 'false');
+            update_option('pps_saveLastMessage', 'false');
 
         $sppsEnableSound = '';
-        if (isset($_POST['simpar_enableSound'])) {  
-            update_option('simpar_enableSound', 'true');
+        if (isset($_POST['pps_enableSound'])) {  
+            update_option('pps_enableSound', 'true');
             $sppsEnableSound = ' checked="checked"';
         }
         else
-            update_option('simpar_enableSound', 'false');
+            update_option('pps_enableSound', 'false');
 
 
         $sppsDoNotIncludeChannel = '';
-        if (isset($_POST['simpar_doNotIncludeChannel'])) {  
-            update_option('simpar_doNotIncludeChannel', 'true');
+        if (isset($_POST['pps_doNotIncludeChannel'])) {  
+            update_option('pps_doNotIncludeChannel', 'true');
             $sppsDoNotIncludeChannel = ' checked="checked"';
         }
         else
-            update_option('simpar_doNotIncludeChannel', 'false');
+            update_option('pps_doNotIncludeChannel', 'false');
 
-        $sppsPushChannels = trim($_POST['simpar_pushChannels'], " ");
-        update_option('simpar_pushChannels', $sppsPushChannels);
+        $sppsPushChannels = trim($_POST['pps_pushChannels'], " ");
+        update_option('pps_pushChannels', $sppsPushChannels);
 
-        $sppsMetaBoxPriority = $_POST['simpar_metaBoxPriority'];
-        update_option('simpar_metaBoxPriority', $sppsMetaBoxPriority);
+        $sppsMetaBoxPriority = $_POST['pps_metaBoxPriority'];
+        update_option('pps_metaBoxPriority', $sppsMetaBoxPriority);
 
 
-        if (isset($_POST['simpar_metabox_pt'])) {
-            addOrUpdateOption('simpar_metabox_pt', $_POST['simpar_metabox_pt']);
+        if (isset($_POST['pps_metabox_pt'])) {
+            update_option('pps_metabox_pt', $_POST['pps_metabox_pt'], false);
         }
         else {
-            delete_option('simpar_metabox_pt');
+            delete_option('pps_metabox_pt');
         }
         ?>  
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
     <?php
     } else {  
         //Normal page display  
-        $sppsAppName   = get_option('simpar_appName');
-        $sppsAppID     = get_option('simpar_appID');  
-        $sppsRestApi   = get_option('simpar_restApi'); 
+        $sppsAppName   = get_option('pps_appName');
+        $sppsAppID     = get_option('pps_appID');  
+        $sppsRestApi   = get_option('pps_restApi'); 
        	$sppsAutoSendTitle = '';
-       	if (get_option('simpar_autoSendTitle') == 'true') 
+       	if (get_option('pps_autoSendTitle') == 'true') 
        		$sppsAutoSendTitle = ' checked="checked"';
         $sppsSaveLastMessage = '';
-        if (get_option('simpar_saveLastMessage') == 'true') 
+        if (get_option('pps_saveLastMessage') == 'true') 
             $sppsSaveLastMessage = ' checked="checked"';
         $sppsEnableSound = '';
-        if (get_option('simpar_enableSound') == 'true') 
+        if (get_option('pps_enableSound') == 'true') 
             $sppsEnableSound = ' checked="checked"';
 
         $sppsIncludePostID = '';
-        if (get_option('simpar_includePostID') == 'true')
+        if (get_option('pps_includePostID') == 'true')
             $sppsIncludePostID = ' checked="checked"';
 
         $sppsDiscardScheduledPosts = '';
-        if (get_option('simpar_discardScheduledPosts') == 'true')
+        if (get_option('pps_discardScheduledPosts') == 'true')
             $sppsDiscardScheduledPosts = ' checked="checked"';
 
-        $sppsPushChannels = get_option('simpar_pushChannels');
+        $sppsPushChannels = get_option('pps_pushChannels');
 
         $sppsDoNotIncludeChannel = '';
-        if (get_option('simpar_doNotIncludeChannel') == 'true') 
+        if (get_option('pps_doNotIncludeChannel') == 'true') 
             $sppsDoNotIncludeChannel = ' checked="checked"';
 
-        $sppsMetaBoxPriority = get_option('simpar_metaBoxPriority');
+        $sppsMetaBoxPriority = get_option('pps_metaBoxPriority');
         if ($sppsMetaBoxPriority == '') {
             $sppsMetaBoxPriority = 'high';
         }
     }  
 
 
-    if (isset( $_POST['simpar_push_hidden'] ) && ( $_POST['simpar_push_hidden'] == 'Y' )) {
-    	$msg = $_POST['simpar_push_message'];
-    	$badge = $_POST['simpar_push_badge'];
+    if (isset( $_POST['pps_push_hidden'] ) && ( $_POST['pps_push_hidden'] == 'Y' )) {
+    	$msg = $_POST['pps_push_message'];
+    	$badge = $_POST['pps_push_badge'];
 
-    	if (get_option('simpar_appID') == null || get_option('simpar_restApi') == null || $msg == null)
+    	if (get_option('pps_appID') == null || get_option('pps_restApi') == null || $msg == null)
     	{ 
     		?>
     		<div class="error"><p><strong><?php _e('Fill all Parse.com Account settings, write a message and try again.' ); ?></strong></p></div>
@@ -129,8 +129,8 @@
     	}
     	else
     	{
-    		include('pushFunctionality.php');
-    		echo sendPushNotification(get_option('simpar_appID'), get_option('simpar_restApi'), $msg, $badge, null, get_option('simpar_pushChannels'), $_POST['pushExtraKey'], $_POST['pushExtraValue']);
+    		include('parse-api.php');
+    		echo sendPushNotification(get_option('pps_appID'), get_option('pps_restApi'), $msg, $badge, null, get_option('pps_pushChannels'), $_POST['pushExtraKey'], $_POST['pushExtraValue']);
     	}
     }
 ?> 
@@ -165,52 +165,52 @@
                     
                     <div class="postbox">
                     
-                        <h3><span><?php    echo __( 'Parse.com Push Service - Settings', 'simpar_trdom' ) . " (Parse.com <a href=\"http://parse.com/apps\" target=\"_blank\">Dashboard</a>)"; ?>  </span></h3>
+                        <h3><span><?php    echo __( 'Parse.com Push Service - Settings', 'pps_trdom' ) . " (Parse.com <a href=\"http://parse.com/apps\" target=\"_blank\">Dashboard</a>)"; ?>  </span></h3>
                         <div class="inside">
-                            <form name="simpar_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
-                                <input type="hidden" name="simpar_hidden" value="Y">  
+                            <form name="pps_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
+                                <input type="hidden" name="pps_hidden" value="Y">  
         
                                 <table class="form-table">
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><?php _e("Application name: " ); ?></label></td>
-                                        <td><input type="text" name="simpar_appName" value="<?php echo $sppsAppName; ?>" class="regular-text"></td>
+                                        <td><input type="text" name="pps_appName" value="<?php echo $sppsAppName; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell"><i><?php _e("Application ID: " ); ?></i></label></td>
-                                        <td><input type="text" name="simpar_appID" value="<?php echo $sppsAppID; ?>" class="regular-text"></td>
+                                        <td><input type="text" name="pps_appID" value="<?php echo $sppsAppID; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><i><?php _e("REST API Key: " ); ?></i></label></td>
-                                        <td><input type="text" name="simpar_restApi" value="<?php echo $sppsRestApi; ?>" class="regular-text"></td>
+                                        <td><input type="text" name="pps_restApi" value="<?php echo $sppsRestApi; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell">Sound</label></td>
                                         <td>
-                                            <input type="checkbox" name="simpar_enableSound" <?php echo $sppsEnableSound; ?> > Enable
+                                            <input type="checkbox" name="pps_enableSound" <?php echo $sppsEnableSound; ?> > Enable
                                             <p class="description">Enable the default sound for Push Notifications.</p>
                                         </td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell">Notification title</label></td>
-                                        <td><input type="checkbox" name="simpar_autoSendTitle" <?php echo $sppsAutoSendTitle; ?> > Send post's title as the Push Notification's title
+                                        <td><input type="checkbox" name="pps_autoSendTitle" <?php echo $sppsAutoSendTitle; ?> > Send post's title as the Push Notification's title
                                             <p class="description">This option is available while you edit a post or create a new one.</p></td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell">Notification message</label></td>
                                         <td>
-                                            <input type="checkbox" name="simpar_saveLastMessage" <?php echo $sppsSaveLastMessage; ?> > Remember last used message in posts
+                                            <input type="checkbox" name="pps_saveLastMessage" <?php echo $sppsSaveLastMessage; ?> > Remember last used message in posts
                                             <p class="description">You can check this option and send a default message (e.g. Check out my new post! ) every time you create a new post.</p>
                                         </td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell">Post id</label></td>
-                                        <td><input type="checkbox" name="simpar_includePostID" <?php echo $sppsIncludePostID; ?> > Auto include post_ID as extra parameter
+                                        <td><input type="checkbox" name="pps_includePostID" <?php echo $sppsIncludePostID; ?> > Auto include post_ID as extra parameter
                                             <p class="description">See the 'Sample Payload' for more technical info.</p>
                                         </td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell">Discard for scheduled</label></td>
-                                        <td><input type="checkbox" name="simpar_discardScheduledPosts" <?php echo $sppsDiscardScheduledPosts; ?> > Do not save Push Notification for scheduled posts
+                                        <td><input type="checkbox" name="pps_discardScheduledPosts" <?php echo $sppsDiscardScheduledPosts; ?> > Do not save Push Notification for scheduled posts
                                             <p class="description">If this is disabled, every time you schedule a post for future publish, the appropriate Push Notification (if any) will be saved add Pushed with post's publication. Existing (saved) push notifications won't be affected.</p>
                                         </td>
                                     </tr>
@@ -221,13 +221,13 @@
                                 <table class="form-table">
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell">Push channels</label></td>
-                                        <td><input type="text" name="simpar_pushChannels" placeholder="e.g. news,sports,tennis" value="<?php echo $sppsPushChannels; ?>" class="regular-text">
+                                        <td><input type="text" name="pps_pushChannels" placeholder="e.g. news,sports,tennis" value="<?php echo $sppsPushChannels; ?>" class="regular-text">
                                             <p class="description"><strong>Comma</strong> separated and <strong>without</strong> spaces, names for the channels you want to be receiving the notifications. If empty, global broadcast channel (GBC) is selected (GBC is an empty string).</p>
                                         </td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell"></label></td>
-                                        <td><input type="checkbox" name="simpar_doNotIncludeChannel" <?php echo $sppsDoNotIncludeChannel; ?> > Do not include ANY channel. Send notifications to everyone.</td>
+                                        <td><input type="checkbox" name="pps_doNotIncludeChannel" <?php echo $sppsDoNotIncludeChannel; ?> > Do not include ANY channel. Send notifications to everyone.</td>
                                     </tr>
                                 </table>
                                 
@@ -237,7 +237,7 @@
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><?php _e("Meta Box priority " ); ?></label></td>
                                         <td>
-                                            <select name="simpar_metaBoxPriority">
+                                            <select name="pps_metaBoxPriority">
                                                 <?php
                                                     $priorities = array('high', 'core', 'default', 'low');
                                                     for ($i = 0; $i < 4; $i++) {
@@ -262,16 +262,16 @@
                                     <tr valign="top">
                                         <td scope="row">
                                             <label for="tablecell">
-                                                <h3><span><?php echo __( 'Post Types with MetaBox enabled', 'simpar_trdom' ) ?></span></h3>
+                                                <h3><span><?php echo __( 'Post Types with MetaBox enabled', 'pps_trdom' ) ?></span></h3>
                                             </label>
 
                                             <?php
-                                                $savedPostTypes = get_option('simpar_metabox_pt');
+                                                $savedPostTypes = get_option('pps_metabox_pt');
                                            
                                                 /* Posts are pre-defined
                                                 =================================== */
                                                 echo '<input type="checkbox" disabled checked/> Posts <br/>';
-                                                echo '<input type="hidden" name="simpar_metabox_pt[]" value="post" />';
+                                                echo '<input type="hidden" name="pps_metabox_pt[]" value="post" />';
                                             
                                                 /* Check if pages are selected
                                                 ==================================== */
@@ -279,7 +279,7 @@
                                                 if (in_array('page', $savedPostTypes))
                                                     $sppsSavedPage = ' checked="checked"';
                                                 // die( print_r($savedPostTypes));
-                                                echo '<input type="checkbox" name="simpar_metabox_pt[]" value="page"'.$sppsSavedPage.'/> Pages <br/>';
+                                                echo '<input type="checkbox" name="pps_metabox_pt[]" value="page"'.$sppsSavedPage.'/> Pages <br/>';
                                            
 
                                                 /* Check for custom types
@@ -291,7 +291,7 @@
                                                     $sppsSaved = '';
                                                     if (in_array($post_type->name, $savedPostTypes))
                                                         $sppsSaved = ' checked="checked"';
-                                                    echo '<input type="checkbox" name="simpar_metabox_pt[]" value="'.$post_type->name.'" '.$sppsSaved.' />'.$post_type->label.' <br/>';
+                                                    echo '<input type="checkbox" name="pps_metabox_pt[]" value="'.$post_type->name.'" '.$sppsSaved.' />'.$post_type->label.' <br/>';
                                                 }
                                             ?>
 
@@ -302,7 +302,7 @@
 
 
                                 <p class="submit">
-                                    <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'simpar_trdom' ) ?>" />
+                                    <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'pps_trdom' ) ?>" />
                                 </tr>
                             </form>
 
@@ -318,16 +318,16 @@
                         <div class="inside">
                             <!-- push dashboard -->
                             <form name="sendPush_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-                                <input type="hidden" name="simpar_push_hidden" value="Y">  
+                                <input type="hidden" name="pps_push_hidden" value="Y">  
                                 
                                 <table class="form-table">
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><i><?php _e("Message:"); ?></i></label></td>
-                                        <td><input type="text" name="simpar_push_message" class="regular-text"></td>
+                                        <td><input type="text" name="pps_push_message" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><i><?php _e("Badge:"); ?></i></label></td>
-                                        <td><input type="text" name="simpar_push_badge" class="regular-text">
+                                        <td><input type="text" name="pps_push_badge" class="regular-text">
                                             <p class="description"><i>0 or 1 or 2...  "increment" value also works (for iOS)</i></p>
                                         </td>
                                     </tr>
@@ -379,25 +379,6 @@
                         </div>
                     </div>
 
-                    <div class="postbox">
-                    
-                        <h3><span>Donation</span></h3>
-                        <div class="inside">
-                            <div style="text-align:center; margin-top:10px;">
-                                If you like this plugin, please consider a donation!  
-                                <br/>Thank you for your support!<br/>
-                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                                    <input type="hidden" name="cmd" value="_s-xclick">
-                                    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHZwYJKoZIhvcNAQcEoIIHWDCCB1QCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYCX8x8/gNLnq/bMNjjVMHrA9N8/cllbgYH78yeQEpcStCfv1J2I3m25BzulL/t+tSEZjPpqwoB4kjvolG8DJZcEnfMtPovtjjexZ0gf3GhYIHtpnzCQaRuoRX1EubCq0ra1Sdp4hKCmV0art7amxR6Vn6zS7W32BF2kMb1oSGslxDELMAkGBSsOAwIaBQAwgeQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIESLDMuvwlWWAgcDB3ik9TK+kf3Yh3qKybBz9MY8MJUR2ZixXkD7mU5TcKZ/dMl32Up0ZmVInErv/8gOSrSBpr/EthBMLihNV8O0xjHkR6JTCpD66Y+T5ZY7G7/ZTy2iP0kf3zwPqg0amfq3Ft7nLW04tn/ocWO+uKBfBBx+Kw8aEMAzy1KwCbZiXVYijIuYQMTy6t+X+GswaCiA74TuSCSs5E/Nx0zvqUrBK4C0+DiIuAU5mGKZ0toXH/fDGfD64Y4/+nWWsiwyYENWgggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xMzA2MjIxNTAyMTBaMCMGCSqGSIb3DQEJBDEWBBSLorXU+F3EQQXZIeY66B1R/h6WtTANBgkqhkiG9w0BAQEFAASBgGFrohA3C9CfV7BEo+wmlBgT5B6oVrzX8Uy7EOwZUHqUOaR0mzePHBIVEllc5LYcR2J1CQy7lTIILSreZvipXZgjUE9zsAZiBIEKjNWYP1QgQAsRHbIPer9iTMqL0djUbk03dXyUv3t2qBQVAVXvIF7KDvX3+F7x8s6NQ4kokJk8-----END PKCS7-----
-                                    ">
-                                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                                    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                                </form> 
-                            </div>
-                        </div> <!-- .inside -->
-                        
-                    </div> <!-- .postbox -->
-                    
                 </div> <!-- .meta-box-sortables -->
                 
             </div> <!-- #postbox-container-1 .postbox-container -->

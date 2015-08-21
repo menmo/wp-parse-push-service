@@ -1,9 +1,29 @@
 <?php
 
-function sendPushNotification($message, $channels)
+function pps_send_post_notification($post_id, $alert = '') {
+	if(empty($alert)) {
+		$alert = get_the_title($post_id);
+	}
+	if(!empty($alert)) {
+		$all_categories = array();
+		$categories = get_the_category($post_id);
+		foreach($categories as $cat) {
+			$all_categories = array_merge($all_categories, explode(',', trim(get_category_parents($cat->term_id, false, ',', true), ',')));
+		}
+		$all_categories = array_values(array_unique($all_categories));
+		return pps_send_push_notification(array(
+			'alert' => $alert,
+			'badge' => 0,
+			'post_id' => $post_id
+		), $all_categories);
+	}
+	return false;
+}
+
+function pps_send_push_notification($message, $channels)
 {
-	$appID = get_option('simpar_appID');
-	$apiKey = get_option('simpar_restApi');
+	$appID = get_option('pps_appID');
+	$apiKey = get_option('pps_restApi');
 
 	$url = 'https://api.parse.com/1/push/';
 	$data = array(

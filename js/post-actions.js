@@ -1,5 +1,5 @@
 jQuery(document).ready( function($) {
-    var box = $('#simpar_tid_post');
+    var box = $('#pps_box');
     var spinner = box.find('.spinner');
     box.find('button').click(function(e) {
         var button = $(this);
@@ -7,9 +7,9 @@ jQuery(document).ready( function($) {
         button.attr('disabled', 'disabled');
         spinner.css('visibility', 'visible');
         var data = {
-            action: 'simpar_push_notification',
+            action: 'pps_push_notification',
             post_id: $('#post_ID').val(),
-            message: $('#simpar_pushText').val()
+            message: $('#pps_alert').val()
         };
         $.post(ajaxurl, data, function(response) {
             button.removeAttr('disabled');

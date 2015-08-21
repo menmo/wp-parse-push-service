@@ -4,7 +4,7 @@
  * @version 1.3.5
  */
 /*
-Plugin Name: Simple Parse Push Service
+Plugin Name: Parse Push Service
 Plugin URI: http://wordpress.org/plugins/simple-parse-push-service/
 Description: This is a simple implementation for Parse.com Push Service (for iOS, Android, Windows, Windows Phone or any other devices may add). You can send a push notification via admin panel or with a post update/creation. In order to use this plugin you MUST have an account with Parse.com and cURL ENABLED.
 Author: Tsolis Dimitris - Sotiris
@@ -50,102 +50,70 @@ function simpar_admin_init() {
     		$scheduledPosts = array();
     	}
 
-
-    	$sppsMetaBoxPriority = get_option('simpar_metaBoxPriority');
-        if ($sppsMetaBoxPriority == '') {
-            $sppsMetaBoxPriority = 'high';
-        }
-
         /* 
          * Enable meta box and the appropriate hooks
          * for each post type available
          ======================================================== */
         
-        $savedPostTypes = get_option('simpar_metabox_pt');
+        $savedPostTypes = get_option('simpar_metabox_pt', array());
 
-        if ( count( $savedPostTypes ) == 0) { // bug fix: admin area is really slow...
+        if ( count( $savedPostTypes ) == 0) {
         	$savedPostTypes[] = 'post';
-        	addOrUpdateOption('simpar_metabox_pt', $savedPostTypes);
-        	$savedPostTypes = get_option('simpar_metabox_pt');
-        } else {
-        	// distincts the post-types array
-        	// remaining from the bug above that was filling the array with the same data
-			$savedPostTypes = array_unique($savedPostTypes);
+        	update_option('simpar_metabox_pt', $savedPostTypes, false);
         }
 
         foreach ($savedPostTypes as $postType) {
         	add_meta_box( 
 		        'simpar_tid_post',
-		        'Simple Parse Push Notification',
+		        'Push Notification',
 		        'simpar_boxcontent',
 		        $postType,
 		        'side',
-		        $sppsMetaBoxPriority
+				get_option('simpar_metaBoxPriority', 'high')
 		    );
-
-
-			add_action('publish_'.$postType, 'simpar_send_post');
         }
-    	
+
+		add_action( 'wp_ajax_my_action', 'my_action_callback' );
+
+		function my_action_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$whatever = intval( $_POST['whatever'] );
+
+			$whatever += 10;
+
+			echo $whatever;
+
+			wp_die(); // this is required to terminate immediately and return a proper response
+		}
     }
 }
 
-function simpar_boxcontent() {
-	wp_nonce_field( plugin_basename(__FILE__), 'simpar_nonce' );
-	  
-	$selected = '';
-	$checked = '';
-	if (get_option('simpar_autoSendTitle') == 'true') {
-		$selected = ' selected="selected"';
-		$checked  = ' checked="checked"';
+function simpar_boxcontent($post) {
+	echo '<p>';
+	echo '<label for="simpar_pushText">' . __('Message') . '</label><br/>';
+	echo '<input id="simpar_pushText" type="text" name="simpar_pushText" value="" style="width: 100%;">';
+	_e('Leave empty to use post title.');
+	echo '</p>';
+
+	switch($post->post_status) {
+		case 'publish':
+			echo '<button class="button button-primary">'.__('Send').'</button>';
+			break;
+		case 'future':
+			echo '<button class="button button-primary">'.__('Send when published').'</button>';
+			break;
+		default:
+			echo '<button class="button button-primary" disabled="disabled">'.__('Send').'</button>';
+			echo __('Post is not published');
 	}
 
-	$sppsLastMessage = '';
-    if (get_option('simpar_saveLastMessage') == 'true') {
-        $sppsLastMessage = get_option('simpar_lastMessage');
-        $selected = ' selected="selected"';
-    }
-
-    $includePostIDChecked  = '';
-    if (get_option('simpar_includePostID') == 'true') {
-    	$includePostIDChecked  = ' checked="checked"';
-    }
-
-    $sendToChannelsChecked = '';
-    if (get_option('simpar_sendToChannels') == 'true') {
-    	$sendToChannelsChecked = ' checked="checked"';
-    }
-
-	echo '<label for="simpar_pushText">';
-		_e("Alert Message", 'simpar_context');
-	echo '</label><br/>';
-	echo '<input id="simpar_pushText" type="text" name="simpar_pushText" value="'.$sppsLastMessage.'" size=\"30\"><br/>';
-
-	echo '<label for="simpar_pushBadge">';
-		_e("Badge(0 or 1... 'increment' also works (for iOS))", 'simpar_context');
-	echo '</label><br/>';
-	echo '<input id="simpar_pushBadge" type="text" name="simpar_pushBadge" value"'.__("", 'simpar_context').'" size=\"10\"<br/><br/>';
-
-	echo '<input id="simpar_titleCheckBox" type="checkbox" name="simpar_titleCheckBox"'.$checked.'>&nbsp;Send title as message (ignore the textbox above).<br/><br/>';
-	echo '<input id="simpar_includePostIDCheckBox" type="checkbox" name="simpar_includePostIDCheckBox"'.$includePostIDChecked.'>&nbsp;Include postID as extra param.<br/><br/>';
-
-	echo '<label for="simpar_activate">';
-       _e("Activate Push Notifications for this post ? ", 'simpar_context' );
-	echo '</label><br/>';
-	echo '<select id="simpar_activate" name="simpar_activate"><option value="0">'.__("No", 'simpar_context' ).'</option><option value="1"'.$selected.'>'.__("Yes", 'simpar_context' ).'</option></select>';
+	echo '<div class="spinner"></div>';
 }
 
 /////////////
 // Helpers //
 /////////////
-function addOrUpdateOption($option_name, $value) {
-	if ( get_option( $option_name ) !== false ) {
-		if ( get_option( $option_name ) !== $value)
-	    	update_option( $option_name, $value );
-	} else {
-	    add_option( $option_name, $value );
-	}
-}
 
 function indexForScheduledPost($post_ID) {
 	global $scheduledPosts;
@@ -173,7 +141,7 @@ function removeScheduledPost($post_ID) {
     	unset( $scheduledPosts[$index] );
     	$scheduledPosts = array_values( $scheduledPosts );
     	// ...and save update the cached array
-		addOrUpdateOption( 'simpar_scheduled_message_options', $scheduledPosts );
+		update_option( 'simpar_scheduled_message_options', $scheduledPosts, false );
 		$scheduledPosts = get_option( 'simpar_scheduled_message_options' );
     }
 }
@@ -256,6 +224,33 @@ function simpar_future_to_publish($post) {
     }
 }
 
+function simpar_push_notification() {
+	$post_id = @$_POST['post_id'];
+
+	if(is_numeric($post_id)) {
+        $alert = $_POST['message'];
+        if(empty($alert)) {
+            $alert = get_the_title($post_id);
+        }
+        if(!empty($alert)) {
+            $all_categories = array();
+            $categories = get_the_category($post_id);
+            foreach($categories as $cat) {
+                $all_categories = array_merge($all_categories, explode(',', trim(get_category_parents($cat->term_id, false, ',', true), ',')));
+            }
+            $all_categories = array_values(array_unique($all_categories));
+            include('pushFunctionality.php');
+            echo sendPushNotification(array(
+                'alert' => $alert,
+                'badge' => 0,
+                'post_id' => $post_id
+            ), $all_categories);
+        }
+	}
+
+	wp_die();
+}
+
 function simpar_save_post($new_status, $old_status, $post) {
 	if ( $old_status == 'draft' && $new_status == 'publish' ) {
 		simpar_send_post($post->ID);
@@ -323,11 +318,8 @@ function simpar_admin_actions() {
 	$pending_notf_page = add_submenu_page( "Simple-Parse-Push-Service", "Pending Notifications", "Pending Notifications", "manage_options", "spps_pending_notifications", "simpar_submenu" );
 	add_action( "admin_head-{$pending_notf_page}", 'my_admin_head_script' );
 
-	/* 
-	 * enqueue javascript to make 'postbox'-es 
-	 * act like the dashboard 'postbox'-es
-	 * ======================================================== */
-	wp_enqueue_script("dashboard");
+	add_action( 'admin_print_scripts-post-new.php', 'simpar_post_admin_script', 11 );
+	add_action( 'admin_print_scripts-post.php', 'simpar_post_admin_script', 11 );
 } 
 
 
@@ -338,6 +330,9 @@ function my_admin_head_script() {
 	wp_enqueue_script( 'admin-pending-notf-js', plugin_dir_url( __FILE__ ).'js/pendingNotificationsAdmin.js' );
 }
 
+function simpar_post_admin_script() {
+	wp_enqueue_script( 'simpar-post-actions', plugin_dir_url( __FILE__ ).'js/post-actions.js' );
+}
 
 
 ////////////////////////////////////////
@@ -371,6 +366,8 @@ add_action('admin_init', 'simpar_admin_init', 1);
 add_action('admin_menu', 'simpar_admin_actions');  
 add_action('future_to_publish', 'simpar_future_to_publish');
 add_action( 'transition_post_status', 'simpar_save_post', 10, 3 );
+add_action( 'wp_ajax_simpar_push_notification', 'simpar_push_notification' );
+
 register_uninstall_hook(__FILE__, 'simpar_plugin_on_uninstall');
 
 

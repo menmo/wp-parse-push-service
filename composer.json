@@ -1,0 +1,13 @@
+{
+    "name":        "parse-push-service",
+    "type":        "wordpress-plugin",
+    "description": "This is a simple implementation for Parse.com Push Service",
+    "keywords": ["sidebar", "dynamic"],
+    "homepage":    "https://github.com/menmo/wp-parse-push-service",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@git.menmo.se:menmo/wp-parse-push-service.git"
+        }
+    ]
+}

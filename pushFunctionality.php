@@ -1,42 +1,21 @@
 <?php
 
-function sendPushNotification($AppID, $RestApiKey, $AlertMessage, $Badge, $postID = null, $sendToChannels = null, $extraParamKey = null, $extraParamValue = null) 
+function sendPushNotification($message, $channels)
 {
+	$appID = get_option('simpar_appID');
+	$apiKey = get_option('simpar_restApi');
+
 	$url = 'https://api.parse.com/1/push/';
 	$data = array(
 	    'expiry' => 1451606400,
-	    'data' => array(
-	        'alert' => $AlertMessage,
-	        'badge' => $Badge,
-	    ),
+	    'data' => $message,
+		'channels' => $channels
 	);
-
-	if (get_option('simpar_enableSound') == 'true') {
-		$data['data']['sound'] = "default";
-	}
-	if ($postID != null) {
-		$data['data']['post_id'] = $postID;
-	}
-	if ($extraParamKey != null && $extraParamValue != null) {
-		$data['data'][$extraParamKey] = $extraParamValue;
-	}
-    if (get_option('simpar_doNotIncludeChannel') == 'true') {
-    	$data['where'] = '{}';
-    }
-    else {
-    	if ($sendToChannels == null) {
-			$data['channel'] = '';
-		}
-		else {
-    		$data['channels'] = explode(',', $sendToChannels);
-    	}
-    }
-
 
 	$_data = json_encode($data);
 	$headers = array(
-	    'X-Parse-Application-Id: ' . $AppID,
-	    'X-Parse-REST-API-Key: ' . $RestApiKey,
+	    'X-Parse-Application-Id: ' . $appID,
+	    'X-Parse-REST-API-Key: ' . $apiKey,
 	    'Content-Type: application/json',
 	    'Content-Length: ' . strlen($_data),
 	);

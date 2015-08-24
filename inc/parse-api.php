@@ -20,10 +20,14 @@ function pps_send_post_notification($post_id, $alert = '') {
 	return false;
 }
 
-function pps_send_push_notification($message, $channels)
+function pps_send_push_notification($message, $channels = array(""))
 {
 	$appID = get_option('pps_appID');
 	$apiKey = get_option('pps_restApi');
+
+	if(!isset($message['sound']) && get_option('pps_enableSound', false)) {
+		$message['sound'] = 'default';
+	}
 
 	$url = 'https://api.parse.com/1/push/';
 	$data = array(

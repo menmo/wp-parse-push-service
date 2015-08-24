@@ -5,71 +5,23 @@
     /////////////////////////////
     if(isset( $_POST['pps_hidden'] ) && ( $_POST['pps_hidden'] == 'Y' )) {  
         //Form data sent 
-        $sppsAppName = $_POST['pps_appName'];  
-        update_option('pps_appName', $sppsAppName); 
-
-        $sppsAppID = $_POST['pps_appID'];  
-        update_option('pps_appID', $sppsAppID);  
+        $ppsAppID = $_POST['pps_appID'];
+        update_option('pps_appID', $ppsAppID, false);
           
-        $sppsRestApi = $_POST['pps_restApi'];  
-        update_option('pps_restApi', $sppsRestApi); 
+        $ppsRestApi = $_POST['pps_restApi'];  
+        update_option('pps_restApi', $ppsRestApi, false);
 
-        $sppsAutoSendTitle = '';
-        if (isset($_POST['pps_autoSendTitle'])) {  
-        	update_option('pps_autoSendTitle', 'true');
-        	$sppsAutoSendTitle = ' checked="checked"';
-        }
-        else
-        	update_option('pps_autoSendTitle', 'false');
-
-        $sppsIncludePostID = '';
-        if (isset($_POST['pps_includePostID'])) {
-            update_option('pps_includePostID', 'true');
-            $sppsIncludePostID = ' checked="checked"';
-        }
-        else
-            update_option('pps_includePostID', 'false');
-
-
-        $sppsDiscardScheduledPosts = '';
-        if (isset($_POST['pps_discardScheduledPosts'])) {
-            update_option('pps_discardScheduledPosts', 'true');
-            $sppsDiscardScheduledPosts = ' checked="checked"';
-        }
-        else
-            update_option('pps_discardScheduledPosts', 'false');
-
-
-        $sppsSaveLastMessage = '';
-        if (isset($_POST['pps_saveLastMessage'])) {  
-            update_option('pps_saveLastMessage', 'true');
-            $sppsSaveLastMessage = ' checked="checked"';
-        }
-        else
-            update_option('pps_saveLastMessage', 'false');
-
-        $sppsEnableSound = '';
+        $ppsEnableSound = '';
         if (isset($_POST['pps_enableSound'])) {  
-            update_option('pps_enableSound', 'true');
-            $sppsEnableSound = ' checked="checked"';
+            update_option('pps_enableSound', 'true', false);
+            $ppsEnableSound = ' checked="checked"';
         }
-        else
-            update_option('pps_enableSound', 'false');
-
-
-        $sppsDoNotIncludeChannel = '';
-        if (isset($_POST['pps_doNotIncludeChannel'])) {  
-            update_option('pps_doNotIncludeChannel', 'true');
-            $sppsDoNotIncludeChannel = ' checked="checked"';
+        else {
+            update_option('pps_enableSound', 'false', false);
         }
-        else
-            update_option('pps_doNotIncludeChannel', 'false');
 
-        $sppsPushChannels = trim($_POST['pps_pushChannels'], " ");
-        update_option('pps_pushChannels', $sppsPushChannels);
-
-        $sppsMetaBoxPriority = $_POST['pps_metaBoxPriority'];
-        update_option('pps_metaBoxPriority', $sppsMetaBoxPriority);
+        $ppsMetaBoxPriority = $_POST['pps_metaBoxPriority'];
+        update_option('pps_metaBoxPriority', $ppsMetaBoxPriority, false);
 
 
         if (isset($_POST['pps_metabox_pt'])) {
@@ -83,43 +35,22 @@
     <?php
     } else {  
         //Normal page display  
-        $sppsAppName   = get_option('pps_appName');
-        $sppsAppID     = get_option('pps_appID');  
-        $sppsRestApi   = get_option('pps_restApi'); 
-       	$sppsAutoSendTitle = '';
-       	if (get_option('pps_autoSendTitle') == 'true') 
-       		$sppsAutoSendTitle = ' checked="checked"';
-        $sppsSaveLastMessage = '';
-        if (get_option('pps_saveLastMessage') == 'true') 
-            $sppsSaveLastMessage = ' checked="checked"';
-        $sppsEnableSound = '';
+        $ppsAppName   = get_option('pps_appName');
+        $ppsAppID     = get_option('pps_appID');  
+        $ppsRestApi   = get_option('pps_restApi'); 
+        $ppsEnableSound = '';
         if (get_option('pps_enableSound') == 'true') 
-            $sppsEnableSound = ' checked="checked"';
+            $ppsEnableSound = ' checked="checked"';
 
-        $sppsIncludePostID = '';
-        if (get_option('pps_includePostID') == 'true')
-            $sppsIncludePostID = ' checked="checked"';
-
-        $sppsDiscardScheduledPosts = '';
-        if (get_option('pps_discardScheduledPosts') == 'true')
-            $sppsDiscardScheduledPosts = ' checked="checked"';
-
-        $sppsPushChannels = get_option('pps_pushChannels');
-
-        $sppsDoNotIncludeChannel = '';
-        if (get_option('pps_doNotIncludeChannel') == 'true') 
-            $sppsDoNotIncludeChannel = ' checked="checked"';
-
-        $sppsMetaBoxPriority = get_option('pps_metaBoxPriority');
-        if ($sppsMetaBoxPriority == '') {
-            $sppsMetaBoxPriority = 'high';
+        $ppsMetaBoxPriority = get_option('pps_metaBoxPriority');
+        if ($ppsMetaBoxPriority == '') {
+            $ppsMetaBoxPriority = 'high';
         }
     }  
 
 
     if (isset( $_POST['pps_push_hidden'] ) && ( $_POST['pps_push_hidden'] == 'Y' )) {
     	$msg = $_POST['pps_push_message'];
-    	$badge = $_POST['pps_push_badge'];
 
     	if (get_option('pps_appID') == null || get_option('pps_restApi') == null || $msg == null)
     	{ 
@@ -130,7 +61,12 @@
     	else
     	{
     		include('parse-api.php');
-    		echo sendPushNotification(get_option('pps_appID'), get_option('pps_restApi'), $msg, $badge, null, get_option('pps_pushChannels'), $_POST['pushExtraKey'], $_POST['pushExtraValue']);
+            echo "<div id='pps-notification' class='updated fade'><p><strong>Parse.com response: </strong> ";
+    		echo pps_send_push_notification(array(
+                'alert' => $msg,
+                'badge' => 0
+            ));
+            echo "</p></div>";
     	}
     }
 ?> 
@@ -152,7 +88,7 @@
 <div class="wrap">
     
     <div id="icon-options-general" class="icon32"></div>
-    <h2>Simple Parse Push Service</h2>
+    <h2>Parse Push Service</h2>
     
     <div id="poststuff">
     
@@ -171,66 +107,23 @@
                                 <input type="hidden" name="pps_hidden" value="Y">  
         
                                 <table class="form-table">
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell"><?php _e("Application name: " ); ?></label></td>
-                                        <td><input type="text" name="pps_appName" value="<?php echo $sppsAppName; ?>" class="regular-text"></td>
-                                    </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell"><i><?php _e("Application ID: " ); ?></i></label></td>
-                                        <td><input type="text" name="pps_appID" value="<?php echo $sppsAppID; ?>" class="regular-text"></td>
+                                        <td><input type="text" name="pps_appID" value="<?php echo $ppsAppID; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top">
                                         <td scope="row"><label for="tablecell"><i><?php _e("REST API Key: " ); ?></i></label></td>
-                                        <td><input type="text" name="pps_restApi" value="<?php echo $sppsRestApi; ?>" class="regular-text"></td>
+                                        <td><input type="text" name="pps_restApi" value="<?php echo $ppsRestApi; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell">Sound</label></td>
                                         <td>
-                                            <input type="checkbox" name="pps_enableSound" <?php echo $sppsEnableSound; ?> > Enable
+                                            <input type="checkbox" name="pps_enableSound" <?php echo $ppsEnableSound; ?> > Enable
                                             <p class="description">Enable the default sound for Push Notifications.</p>
-                                        </td>
-                                    </tr>
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell">Notification title</label></td>
-                                        <td><input type="checkbox" name="pps_autoSendTitle" <?php echo $sppsAutoSendTitle; ?> > Send post's title as the Push Notification's title
-                                            <p class="description">This option is available while you edit a post or create a new one.</p></td>
-                                    </tr>
-                                    <tr valign="top" class="alternate">
-                                        <td scope="row"><label for="tablecell">Notification message</label></td>
-                                        <td>
-                                            <input type="checkbox" name="pps_saveLastMessage" <?php echo $sppsSaveLastMessage; ?> > Remember last used message in posts
-                                            <p class="description">You can check this option and send a default message (e.g. Check out my new post! ) every time you create a new post.</p>
-                                        </td>
-                                    </tr>
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell">Post id</label></td>
-                                        <td><input type="checkbox" name="pps_includePostID" <?php echo $sppsIncludePostID; ?> > Auto include post_ID as extra parameter
-                                            <p class="description">See the 'Sample Payload' for more technical info.</p>
-                                        </td>
-                                    </tr>
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell">Discard for scheduled</label></td>
-                                        <td><input type="checkbox" name="pps_discardScheduledPosts" <?php echo $sppsDiscardScheduledPosts; ?> > Do not save Push Notification for scheduled posts
-                                            <p class="description">If this is disabled, every time you schedule a post for future publish, the appropriate Push Notification (if any) will be saved add Pushed with post's publication. Existing (saved) push notifications won't be affected.</p>
                                         </td>
                                     </tr>
                                 </table>
 
-                                <!-- settings - about push channels -->
-                                <hr/>
-                                <table class="form-table">
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell">Push channels</label></td>
-                                        <td><input type="text" name="pps_pushChannels" placeholder="e.g. news,sports,tennis" value="<?php echo $sppsPushChannels; ?>" class="regular-text">
-                                            <p class="description"><strong>Comma</strong> separated and <strong>without</strong> spaces, names for the channels you want to be receiving the notifications. If empty, global broadcast channel (GBC) is selected (GBC is an empty string).</p>
-                                        </td>
-                                    </tr>
-                                    <tr valign="top" class="alternate">
-                                        <td scope="row"><label for="tablecell"></label></td>
-                                        <td><input type="checkbox" name="pps_doNotIncludeChannel" <?php echo $sppsDoNotIncludeChannel; ?> > Do not include ANY channel. Send notifications to everyone.</td>
-                                    </tr>
-                                </table>
-                                
                                 <!-- settings - meta box -->
                                 <hr/>
                                 <table class="form-table">
@@ -241,7 +134,7 @@
                                                 <?php
                                                     $priorities = array('high', 'core', 'default', 'low');
                                                     for ($i = 0; $i < 4; $i++) {
-                                                        if ($priorities[$i] == $sppsMetaBoxPriority) {
+                                                        if ($priorities[$i] == $ppsMetaBoxPriority) {
                                                             echo "<option selected value='$priorities[$i]'>$priorities[$i]</option>";
                                                         }
                                                         else {
@@ -266,7 +159,7 @@
                                             </label>
 
                                             <?php
-                                                $savedPostTypes = get_option('pps_metabox_pt');
+                                                $savedPostTypes = get_option('pps_metabox_pt', array());
                                            
                                                 /* Posts are pre-defined
                                                 =================================== */
@@ -275,11 +168,11 @@
                                             
                                                 /* Check if pages are selected
                                                 ==================================== */
-                                                $sppsSavedPage = '';
+                                                $ppsSavedPage = '';
                                                 if (in_array('page', $savedPostTypes))
-                                                    $sppsSavedPage = ' checked="checked"';
+                                                    $ppsSavedPage = ' checked="checked"';
                                                 // die( print_r($savedPostTypes));
-                                                echo '<input type="checkbox" name="pps_metabox_pt[]" value="page"'.$sppsSavedPage.'/> Pages <br/>';
+                                                echo '<input type="checkbox" name="pps_metabox_pt[]" value="page"'.$ppsSavedPage.'/> Pages <br/>';
                                            
 
                                                 /* Check for custom types
@@ -288,10 +181,10 @@
                                                 $post_types = get_post_types( $args, 'objects' ); 
                                                 foreach ( $post_types as $post_type ) {
 
-                                                    $sppsSaved = '';
+                                                    $ppsSaved = '';
                                                     if (in_array($post_type->name, $savedPostTypes))
-                                                        $sppsSaved = ' checked="checked"';
-                                                    echo '<input type="checkbox" name="pps_metabox_pt[]" value="'.$post_type->name.'" '.$sppsSaved.' />'.$post_type->label.' <br/>';
+                                                        $ppsSaved = ' checked="checked"';
+                                                    echo '<input type="checkbox" name="pps_metabox_pt[]" value="'.$post_type->name.'" '.$ppsSaved.' />'.$post_type->label.' <br/>';
                                                 }
                                             ?>
 
@@ -303,7 +196,7 @@
 
                                 <p class="submit">
                                     <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'pps_trdom' ) ?>" />
-                                </tr>
+                                </p>
                             </form>
 
 
@@ -325,28 +218,8 @@
                                         <td scope="row"><label for="tablecell"><i><?php _e("Message:"); ?></i></label></td>
                                         <td><input type="text" name="pps_push_message" class="regular-text"></td>
                                     </tr>
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell"><i><?php _e("Badge:"); ?></i></label></td>
-                                        <td><input type="text" name="pps_push_badge" class="regular-text">
-                                            <p class="description"><i>0 or 1 or 2...  "increment" value also works (for iOS)</i></p>
-                                        </td>
-                                    </tr>
                                 </table>
-                                <table class="form-table">
-                                    <tr valign="top">
-                                        <td scope="row"><?php _e("Extra key") ?> <input type="text" name="pushExtraKey" class="regular-text">
-                                        <?php _e("Extra value") ?> <input type="text" name="pushExtraValue" class="regular-text"></td>
-                                    </tr>
-                                    <tr valign="top">
-                                        <td scope="row" >
-                                            <p class="description">
-                                                With these extra key/value fields, you can add an extra parameter into the push notification payload as in the 'Sample Payload' (with post_id beeing the extra parameter). 
-                                                You can find more information about <a href="https://www.parse.com/docs/push_guide#receiving-responding/iOS">Responding to the Payload</a> reading <a href="http://www.parse.com">Parse.com</a>'s <a href="https://www.parse.com/docs/">documentation</a>.
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <p class="submit">  
+                                <p class="submit">
                                     <input type="submit" name="Submit" class="button button-action" value="<?php _e('Send Push Notification') ?>" />  
                                 </p> 
                             </form>

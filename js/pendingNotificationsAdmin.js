@@ -3,12 +3,12 @@ jQuery(document).ready( function($) {
 	 * Variables
 	 * ====================== */
     var $checkSelectAll    = $('#selectall');
-    var $checkboxesByClass = $('.simpar_ckb');
+    var $checkboxesByClass = $('.pps_ckb');
     var $checkboxes        = $("input[type='checkbox']");
     var $btnsSubmit        = $("input[type='submit']");
-    var $btnDeleteAsk      = $('#simpar_delete_ask');
-    var $btnDeleteConfirm  = $('#simpar_delete_confirm');
-    var $btnDeleteDeny 	   = $('#simpar_delete_deny');
+    var $btnDeleteAsk      = $('#pps_delete_ask');
+    var $btnDeleteConfirm  = $('#pps_delete_confirm');
+    var $btnDeleteDeny 	   = $('#pps_delete_deny');
     var $btnWarningFSubmit = $('#warning_form_submit');
 
 
@@ -56,7 +56,7 @@ jQuery(document).ready( function($) {
 
     $btnWarningFSubmit.on('click', function(event) {
         event.preventDefault();
-        $('#simpar_warning_form').submit();
+        $('#pps_warning_form').submit();
     });
 
 });

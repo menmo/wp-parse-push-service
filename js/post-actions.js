@@ -12,8 +12,12 @@ jQuery(document).ready( function($) {
             message: $('#pps_alert').val()
         };
         $.post(ajaxurl, data, function(response) {
-            button.removeAttr('disabled');
-            spinner.css('visibility', '');
+            if(response == "reload") {
+                document.location.reload(true);
+            } else {
+                button.removeAttr('disabled');
+                spinner.css('visibility', '');
+            }
         });
     });
 });

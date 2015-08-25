@@ -46,46 +46,46 @@ function pps_admin_init() {
 		        'pps_boxcontent',
 		        $postType,
 		        'side',
-				get_option('pps_metaBoxPriority', 'high')
+				get_option('pps_metaBoxPriority', 'default')
 		    );
         }
 
-        add_action( 'wp_ajax_pps_push_notification', 'pps_send_push_notification' );
+        add_action( 'wp_ajax_pps_push_notification', 'pps_send_post_push_notification' );
     }
 }
 
 function pps_boxcontent($post) {
-	echo '<p>';
-	echo '<label for="pps_alert">' . __('Message') . '</label><br/>';
-	echo '<input id="pps_alert" type="text" name="pps_alert" value="" style="width: 100%;">';
-	_e('Leave empty to use post title.');
-	echo '</p>';
+	$pending = get_post_meta($post->ID, '_pps_future_notification', true);
+	if($pending) {
+		echo __("Post has pending notification");
+		echo '<br/><a href="'.admin_url('admin.php?page=pps').'">Click here to edit</a>';
+	} else {
+		echo '<p>';
+		echo '<label for="pps_alert">' . __('Message') . '</label><br/>';
+		echo '<input id="pps_alert" type="text" name="pps_alert" value="" style="width: 100%;">';
+		_e('Leave empty to use post title.');
+		echo '</p>';
 
-	switch($post->post_status) {
-		case 'publish':
-			echo '<button class="button button-primary">'.__('Send').'</button>';
-			break;
-		case 'future':
-			echo '<button class="button button-primary">'.__('Send when published').'</button>';
-			break;
-		default:
-			echo '<button class="button button-primary" disabled="disabled">'.__('Send').'</button>';
-			echo __('Post is not published');
+		switch($post->post_status) {
+			case 'publish':
+				echo '<button class="button button-primary">'.__('Send').'</button>';
+				break;
+			case 'future':
+				echo '<button class="button button-primary">'.__('Send when published').'</button>';
+				break;
+			default:
+				echo '<button class="button button-primary" disabled="disabled">'.__('Send').'</button>';
+				echo __('Post is not published');
+		}
+		echo '<div class="spinner"></div>';
 	}
-
-	echo '<div class="spinner"></div>';
 }
 
 function pps_future_to_publish($post) {
-
-	$validPostTypes = get_option('pps_metabox_pt');
-	if (!in_array($post->post_type, $validPostTypes)) {
-		return;
-	}
-
     if(get_post_meta($post->ID, '_pps_future_notification', true)) {
         pps_send_post_notification($post->ID, get_post_meta($post->ID, '_pps_future_notification_message', true));
         delete_post_meta($post->ID, '_pps_future_notification');
+        delete_post_meta($post->ID, '_pps_future_notification_message');
     }
 }
 
@@ -101,11 +101,13 @@ function pps_send_post_push_notification() {
             include('inc/parse-api.php');
             echo pps_send_post_notification($post_id, $alert);
         } else if($status == 'future') {
-            echo add_post_meta($post_id, '_pps_future_notification', 1, true);
+            add_post_meta($post_id, '_pps_future_notification', 1, true);
 
             if(!empty($alert)) {
                 add_post_meta($post_id, '_pps_future_notification_message', $alert, true);
             }
+
+			echo "reload";
         }
 	}
 
@@ -115,19 +117,19 @@ function pps_send_post_push_notification() {
 //////////////////////////
 // admin, settings menu //
 //////////////////////////
-function pps_admin() {
+function pps_settings() {
 	include('inc/admin_settings.php');
 }
 
-function pps_submenu() {
+function pps_pending() {
 	include('inc/admin_pending_notf.php');
 }
 
 function pps_admin_actions() {  
 
-    add_menu_page("Parse Push Service", "Parse Push Service", 'manage_options', "pps", "pps_admin");
-	add_submenu_page( "pps", "Settings", "Settings", "manage_options", "pps", "pps_admin" );
-	$pending_notf_page = add_submenu_page( "pps", "Pending Notifications", "Pending Notifications", "manage_options", "pps_pending_notifications", "pps_submenu" );
+    add_menu_page("Parse Push Service", "Parse Push", 'manage_options', "pps", "pps_pending", plugin_dir_url(__FILE__) . 'favicon-16x16.png');
+	$pending_notf_page = add_submenu_page( "pps", "Pending Notifications", "Pending Notifications", "manage_options", "pps", "pps_pending" );
+	add_submenu_page( "pps", "Settings", "Settings", "manage_options", "pps_settings", "pps_settings" );
 	add_action( "admin_head-{$pending_notf_page}", 'pps_pending_notifications_script' );
 
 	add_action( 'admin_print_scripts-post-new.php', 'pps_post_admin_script', 11 );

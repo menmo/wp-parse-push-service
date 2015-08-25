@@ -4,8 +4,8 @@ Plugin Name: Parse Push Service
 Plugin URI: https://github.com/menmo/wp-parse-push-service
 Description: This is a simple implementation for Parse.com Push Service
 Version: 1.0.0
-Author:
-Author URI:
+Author: Menmo AB
+Author URI: http://www.menmo.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */

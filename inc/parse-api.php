@@ -14,7 +14,7 @@ function pps_send_post_notification($post_id, $alert = '') {
 		return pps_send_push_notification(array(
 			'alert' => $alert,
 			'badge' => 0,
-			'post_id' => $post_id
+			'url' => get_permalink($post_id)
 		), $all_categories);
 	}
 	return false;

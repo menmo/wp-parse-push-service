@@ -26,7 +26,7 @@ function pps_admin_init() {
     } else if (@$_GET['page'] != 'pps_settings' && (get_option('pps_appID') == null || get_option('pps_restApi') == null)) {
 
         function pps_appname_warning() {
-            echo "<div id='pps-warning' class='updated fade'><p><strong>".__("Parse Push Service plugin needs to be configured.", 'pps_context') ."</strong> ".sprintf(__('Please go to <a href="%s">Parse Push Service admin menu</a> to configure your Parse Account keys.', 'pps_context'), get_bloginfo('url').'/wp-admin/options-general.php?page=pps_settings')."</p></div>";
+            echo "<div id='pps-warning' class='updated fade'><p><strong>".__("Parse Push Service plugin needs to be configured.", 'pps_context') ."</strong> ".sprintf(__('Please go to <a href="%s">Parse Push Service admin menu</a> to configure your Parse Account keys.', 'pps_context'), get_bloginfo('url').'/wp-admin/admin.php?page=pps_settings')."</p></div>";
         }
         add_action('admin_notices', 'pps_appname_warning'); 
         
@@ -83,6 +83,7 @@ function pps_boxcontent($post) {
 
 function pps_publish_future_post($post_id) {
     if(get_post_meta($post_id, '_pps_future_notification', true)) {
+		include('inc/parse-api.php');
         pps_send_post_notification($post_id, get_post_meta($post_id, '_pps_future_notification_message', true));
         delete_post_meta($post_id, '_pps_future_notification');
         delete_post_meta($post_id, '_pps_future_notification_message');

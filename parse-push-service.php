@@ -81,11 +81,11 @@ function pps_boxcontent($post) {
 	}
 }
 
-function pps_future_to_publish($post) {
-    if(get_post_meta($post->ID, '_pps_future_notification', true)) {
-        pps_send_post_notification($post->ID, get_post_meta($post->ID, '_pps_future_notification_message', true));
-        delete_post_meta($post->ID, '_pps_future_notification');
-        delete_post_meta($post->ID, '_pps_future_notification_message');
+function pps_publish_future_post($post_id) {
+    if(get_post_meta($post_id, '_pps_future_notification', true)) {
+        pps_send_post_notification($post_id, get_post_meta($post_id, '_pps_future_notification_message', true));
+        delete_post_meta($post_id, '_pps_future_notification');
+        delete_post_meta($post_id, '_pps_future_notification_message');
     }
 }
 
@@ -153,6 +153,6 @@ function pps_post_admin_script() {
 ////////////////////////
 add_action('admin_init', 'pps_admin_init', 1);
 add_action('admin_menu', 'pps_admin_actions');  
-add_action('future_to_publish', 'pps_future_to_publish');
+add_action('publish_future_post', 'pps_publish_future_post');
 
 ?>

@@ -1,21 +1,24 @@
 <?php
 
-function pps_send_post_notification($post_id, $alert = '') {
+function pps_send_post_notification($post_id, $alert = '', $channels = array()) {
 	if(empty($alert)) {
 		$alert = get_the_title($post_id);
 	}
-	if(!empty($alert)) {
+	if(empty($channels)) {
 		$all_categories = array();
 		$categories = get_the_category($post_id);
 		foreach($categories as $cat) {
 			$all_categories = array_merge($all_categories, explode(',', trim(get_category_parents($cat->term_id, false, ',', true), ',')));
 		}
-		$all_categories = array_values(array_unique($all_categories));
+		$channels = array_values(array_unique($all_categories));
+	}
+	if(!empty($alert)) {
+		add_post_meta($post_id, '_pps_future_notification_timestamp', current_time( 'mysql' ), true);
 		return pps_send_push_notification(array(
 			'alert' => $alert,
 			'badge' => 0,
 			'url' => get_permalink($post_id)
-		), $all_categories);
+		), $channels);
 	}
 	return false;
 }

@@ -30,6 +30,13 @@
         else {
             delete_option('pps_metabox_pt');
         }
+
+        $selected_cats = $_POST['post_category'];
+        if(empty($selected_cats)) {
+            delete_option('pps_selected_cats');
+        } else {
+            update_option('pps_selected_cats', $selected_cats);
+        }
         ?>  
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
     <?php
@@ -46,7 +53,8 @@
         if ($ppsMetaBoxPriority == '') {
             $ppsMetaBoxPriority = 'high';
         }
-    }  
+        $selected_cats = get_option('pps_selected_cats');
+    }
 
 
     if (isset( $_POST['pps_push_hidden'] ) && ( $_POST['pps_push_hidden'] == 'Y' )) {
@@ -192,6 +200,30 @@
                                     </tr>
                                 </table>
 
+                                <!-- settings - channels -->
+                                <hr/>
+                                <table class="form-table categorydiv">
+                                    <tr valign="top">
+                                        <td scope="row">
+                                            <label for="tablecell">
+                                                <h3><span><?php echo __( 'Enabled channels', 'pps_trdom' ) ?></span></h3>
+                                            </label>
+
+                                            <?php
+                                            $args = array(
+                                                'selected_cats' => $selected_cats,
+                                                'title_li' => false,
+                                                'walker'   => new Walker_Category_Checklist
+                                            );
+                                            ?>
+
+                                            <ul class="categorychecklist">
+                                                <?php wp_list_categories( $args ); ?>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+                                </table>
 
 
                                 <p class="submit">
@@ -204,27 +236,6 @@
                     
                     </div> <!-- .postbox -->
 
-
-                    <div id="sendNow" style="height:40px;"></div>
-                    <div class="postbox">
-                        <h3><span>Send a Push Notification right now!</span></h3>
-                        <div class="inside">
-                            <!-- push dashboard -->
-                            <form name="sendPush_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-                                <input type="hidden" name="pps_push_hidden" value="Y">  
-                                
-                                <table class="form-table">
-                                    <tr valign="top">
-                                        <td scope="row"><label for="tablecell"><i><?php _e("Message:"); ?></i></label></td>
-                                        <td><input type="text" name="pps_push_message" class="regular-text"></td>
-                                    </tr>
-                                </table>
-                                <p class="submit">
-                                    <input type="submit" name="Submit" class="button button-action" value="<?php _e('Send Push Notification') ?>" />  
-                                </p> 
-                            </form>
-                        </div>
-                    </div> <!-- .sent push - box -->
                     
                 </div> <!-- .meta-box-sortables .ui-sortable -->
                 
@@ -251,6 +262,26 @@
 </pre>
                         </div>
                     </div>
+
+                    <div class="postbox">
+                        <h3><span>Send a Push Notification right now!</span></h3>
+                        <div class="inside">
+                            <!-- push dashboard -->
+                            <form name="sendPush_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+                                <input type="hidden" name="pps_push_hidden" value="Y">
+
+                                <table class="form-table">
+                                    <tr valign="top">
+                                        <td scope="row"><label for="tablecell"><i><?php _e("Message:"); ?></i></label></td>
+                                        <td><input type="text" name="pps_push_message" class=""></td>
+                                    </tr>
+                                </table>
+                                <p class="submit">
+                                    <input type="submit" name="Submit" class="button button-action" value="<?php _e('Send Push Notification') ?>" />
+                                </p>
+                            </form>
+                        </div>
+                    </div> <!-- .sent push - box -->
 
                 </div> <!-- .meta-box-sortables -->
                 

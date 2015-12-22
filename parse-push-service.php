@@ -69,7 +69,7 @@ function pps_boxcontent($post) {
         echo '</p>';
 
         $available_channels = get_option('pps_selected_cats');
-        $cats = wp_get_post_categories($post->ID, array('fields' => 'slugs'));
+        $cats = wp_get_post_categories($post->ID);
         $selected_channel = false;
         foreach($cats as $cat) {
             if(in_array($cat, $available_channels)) {

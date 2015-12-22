@@ -68,14 +68,28 @@ function pps_boxcontent($post) {
         _e('Leave empty to use post title.');
         echo '</p>';
 
+        $available_channels = get_option('pps_selected_cats');
         $cats = wp_get_post_categories($post->ID, array('fields' => 'slugs'));
+        $selected_channel = false;
+        foreach($cats as $cat) {
+            if(in_array($cat, $available_channels)) {
+                $selected_channel = $cat;
+                break;
+            }
+        }
+        if(!$selected_channel) {
+            $selected_channel = get_option('pps_default_cat');
+        }
+
         echo '<p>';
         echo '<label for="pps_channel">' . __('Channel') . '</label><br/>';
+
         $args = array(
+            'order_by' => 'name',
             'value_field' => 'slug',
             'name' => 'pps_channel',
-            'include' => get_option('pps_selected_cats'),
-            'selected' => !empty($cats) ?  $cats[0] : false
+            'include' => $available_channels,
+            'selected' => $selected_channel
         );
         wp_dropdown_categories($args);
         echo '</p>';

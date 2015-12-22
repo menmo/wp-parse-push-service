@@ -37,6 +37,9 @@
         } else {
             update_option('pps_selected_cats', $selected_cats);
         }
+
+        update_option('pps_default_cat', $default_cat = $_POST['pps_channel']);
+
         ?>  
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
     <?php
@@ -54,6 +57,7 @@
             $ppsMetaBoxPriority = 'high';
         }
         $selected_cats = get_option('pps_selected_cats');
+        $default_cat = get_option('pps_default_cat');
     }
 
 
@@ -220,11 +224,38 @@
                                             <ul class="categorychecklist">
                                                 <?php wp_list_categories( $args ); ?>
                                             </ul>
-
                                         </td>
                                     </tr>
                                 </table>
 
+                                <table class="form-table">
+                                    <tr>
+                                        <td>
+                                            <label for="tablecell">
+                                                <h3><span><?php echo __( 'Default channel', 'pps_trdom' ) ?></span></h3>
+                                            </label>
+
+
+                                            <?php
+
+                                            if($selected_cats) {
+                                                $args = array(
+                                                    'show_option_none' => __( 'Select default channel', 'pps_trdom' ),
+                                                    'order_by' => 'name',
+                                                    'value_field' => 'slug',
+                                                    'name' => 'pps_channel',
+                                                    'include' => $selected_cats,
+                                                    'selected' => $default_cat
+                                                );
+                                                wp_dropdown_categories($args);
+                                            } else {
+                                                echo __( 'No channels enabled.', 'pps_trdom' );
+                                            }
+
+                                            ?>
+                                        </td>
+                                    </tr>
+                                </table>
 
                                 <p class="submit">
                                     <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'pps_trdom' ) ?>" />

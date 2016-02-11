@@ -91,7 +91,7 @@ function pps_boxcontent($post) {
             'include' => $available_channels,
             'selected' => $selected_channel
         );
-        wp_dropdown_categories($args);
+        get_terms($args);
         echo '</p>';
 
         switch ($post->post_status) {
@@ -196,11 +196,32 @@ function pps_post_admin_script() {
     wp_enqueue_script('pps-post-actions', plugin_dir_url(__FILE__) . 'js/post-actions.js');
 }
 
+/*
+ * outout available push categories for our nobile apps
+ */
+function pps_categories_callback() {
+    $available_channels = get_option('pps_selected_cats');
+    $categories = get_terms('category', array(
+        'include' => $available_channels,
+    ));
+    $output = array();
+
+    foreach($categories as $category) {
+        $output[] = array("slug" => $category->slug, "name" => $category->name);
+    }
+
+    echo json_encode($output);
+
+    exit;
+}
+
 ////////////////////////
 // register functions //
 ////////////////////////
 add_action('admin_init', 'pps_admin_init', 1);
 add_action('admin_menu', 'pps_admin_actions');
 add_action('publish_future_post', 'pps_publish_future_post');
+add_action( 'wp_ajax_pps_categories', 'pps_categories_callback' );
+add_action( 'wp_ajax_nopriv_pps_categories', 'pps_categories_callback' );
 
 ?>

@@ -91,7 +91,7 @@ function pps_boxcontent($post) {
             'include' => $available_channels,
             'selected' => $selected_channel
         );
-        get_terms($args);
+        wp_dropdown_categories($args);
         echo '</p>';
 
         switch ($post->post_status) {

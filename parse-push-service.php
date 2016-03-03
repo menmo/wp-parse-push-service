@@ -137,6 +137,10 @@ function pps_send_post_push_notification() {
 
         if(!empty($channel)) {
             $channels = array($channel);
+            // Temp fix for lokalt/nyheter mixup
+            if($channel === "nyheter") {
+                $channels[] = "lokalt";
+            }
         } else {
             $channels = false;
         }

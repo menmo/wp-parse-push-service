@@ -2,7 +2,7 @@
 
 function pps_send_post_notification($post_id, $alert = '', $channels = array()) {
 	if(empty($alert)) {
-		$alert = get_the_title($post_id);
+		$alert = html_entity_decode( get_the_title($post_id), ENT_QUOTES, 'UTF-8' );
 	}
 	if(empty($channels)) {
 		$all_categories = array();

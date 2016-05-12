@@ -132,7 +132,11 @@ function pps_send_post_push_notification() {
     if (is_numeric($post_id)) {
 
         $status = get_post_status($post_id);
+
+        // TODO FIX HERE
+        // escape unescape
         $alert = @$_POST['message'];
+        $alert = stripslashes($alert);
         $channel = @$_POST['channel'];
 
         if(!empty($channel)) {

@@ -136,7 +136,7 @@ function pps_send_post_push_notification() {
         // TODO FIX HERE
         // escape unescape
         $alert = @$_POST['message'];
-        $alert = stripslashes($alert);
+        $alert = @stripslashes($alert);
         $channel = @$_POST['channel'];
 
         if(!empty($channel)) {

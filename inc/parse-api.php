@@ -25,16 +25,17 @@ function pps_send_post_notification($post_id, $alert = '', $channels = array()) 
 
 function pps_send_push_notification($message, $channels = array(""))
 {
+	$parseUrl = get_option('pps_parseUrl');
 	$appID = get_option('pps_appID');
-	$apiKey = get_option('pps_restApi');
+	$apiKey = get_option('pps_masterKey');
 
 	if(!isset($message['sound']) && get_option('pps_enableSound', false)) {
 		$message['sound'] = 'default';
 	}
 
-	$url = 'https://api.parse.com/1/push/';
+	$url = $parseUrl . '/push/';
 	$data = array(
-	    'expiry' => 1451606400,
+	    'expiration_interval' => 86400,
 	    'data' => $message,
 		'channels' => $channels
 	);
@@ -42,7 +43,7 @@ function pps_send_push_notification($message, $channels = array(""))
 	$_data = json_encode($data);
 	$headers = array(
 	    'X-Parse-Application-Id: ' . $appID,
-	    'X-Parse-REST-API-Key: ' . $apiKey,
+	    'X-Parse-Master-Key: ' . $apiKey,
 	    'Content-Type: application/json',
 	    'Content-Length: ' . strlen($_data),
 	);

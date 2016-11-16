@@ -4,12 +4,15 @@
     // Working with Parameters //
     /////////////////////////////
     if(isset( $_POST['pps_hidden'] ) && ( $_POST['pps_hidden'] == 'Y' )) {  
-        //Form data sent 
+        //Form data sent
+        $ppsParseUrl = $_POST['pps_parseUrl'];
+        update_option('pps_parseUrl', $ppsParseUrl, false);
+
         $ppsAppID = $_POST['pps_appID'];
         update_option('pps_appID', $ppsAppID, false);
           
-        $ppsRestApi = $_POST['pps_restApi'];  
-        update_option('pps_restApi', $ppsRestApi, false);
+        $ppsMasterKey = $_POST['pps_masterKey'];  
+        update_option('pps_masterKey', $ppsMasterKey, false);
 
         $ppsEnableSound = '';
         if (isset($_POST['pps_enableSound'])) {  
@@ -44,10 +47,11 @@
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
     <?php
     } else {  
-        //Normal page display  
+        //Normal page display
+        $ppsParseUrl  = get_option('pps_parseUrl');
         $ppsAppName   = get_option('pps_appName');
         $ppsAppID     = get_option('pps_appID');  
-        $ppsRestApi   = get_option('pps_restApi'); 
+        $ppsMasterKey   = get_option('pps_masterKey');
         $ppsEnableSound = '';
         if (get_option('pps_enableSound') == 'true') 
             $ppsEnableSound = ' checked="checked"';
@@ -64,7 +68,7 @@
     if (isset( $_POST['pps_push_hidden'] ) && ( $_POST['pps_push_hidden'] == 'Y' )) {
     	$msg = $_POST['pps_push_message'];
 
-    	if (get_option('pps_appID') == null || get_option('pps_restApi') == null || $msg == null)
+    	if (get_option('pps_parseUrl') == null || get_option('pps_appID') == null || get_option('pps_MasterKey') == null || $msg == null)
     	{ 
     		?>
     		<div class="error"><p><strong><?php _e('Fill all Parse.com Account settings, write a message and try again.' ); ?></strong></p></div>
@@ -73,7 +77,7 @@
     	else
     	{
     		include('parse-api.php');
-            echo "<div id='pps-notification' class='updated fade'><p><strong>Parse.com response: </strong> ";
+            echo "<div id='pps-notification' class='updated fade'><p><strong>Parse response: </strong> ";
     		echo pps_send_push_notification(array(
                 'alert' => $msg,
                 'badge' => 0
@@ -113,19 +117,23 @@
                     
                     <div class="postbox">
                     
-                        <h3><span><?php    echo __( 'Parse.com Push Service - Settings', 'pps_trdom' ) . " (Parse.com <a href=\"http://parse.com/apps\" target=\"_blank\">Dashboard</a>)"; ?>  </span></h3>
+                        <h3><span><?php    echo __( 'Parse Push Service - Settings', 'pps_trdom' ); ?>  </span></h3>
                         <div class="inside">
                             <form name="pps_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
                                 <input type="hidden" name="pps_hidden" value="Y">  
         
                                 <table class="form-table">
+                                    <tr valign="top">
+                                        <td scope="row"><label for="tablecell"><i><?php _e("Parse url: " ); ?></i></label></td>
+                                        <td><input type="text" name="pps_parseUrl" value="<?php echo $ppsParseUrl; ?>" class="regular-text"></td>
+                                    </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell"><i><?php _e("Application ID: " ); ?></i></label></td>
                                         <td><input type="text" name="pps_appID" value="<?php echo $ppsAppID; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top">
-                                        <td scope="row"><label for="tablecell"><i><?php _e("REST API Key: " ); ?></i></label></td>
-                                        <td><input type="text" name="pps_restApi" value="<?php echo $ppsRestApi; ?>" class="regular-text"></td>
+                                        <td scope="row"><label for="tablecell"><i><?php _e("Master Key: " ); ?></i></label></td>
+                                        <td><input type="text" name="pps_masterKey" value="<?php echo $ppsMasterKey; ?>" class="regular-text"></td>
                                     </tr>
                                     <tr valign="top" class="alternate">
                                         <td scope="row"><label for="tablecell">Sound</label></td>

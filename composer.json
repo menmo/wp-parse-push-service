@@ -1,5 +1,5 @@
 {
-    "name":        "parse-push-service",
+    "name":        "menmo/parse-push-service",
     "type":        "wordpress-plugin",
     "description": "This is a simple implementation for Parse.com Push Service",
     "keywords": ["parse", "push"],

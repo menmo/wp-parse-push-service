@@ -127,7 +127,12 @@ function pps_publish_future_post($post_id) {
 }
 
 function pps_send_post_push_notification() {
+    $guid = @$_POST['guid'];
     $post_id = @$_POST['post_id'];
+
+    if(isset($guid) && class_exists('OcUtilities')) {
+        $post_id = OcUtilities::get_article_post_id_by_uuid($uuid);
+    }
 
     if (is_numeric($post_id)) {
 

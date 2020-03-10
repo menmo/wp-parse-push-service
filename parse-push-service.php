@@ -24,7 +24,7 @@ function pps_admin_init() {
         add_action('admin_notices', 'pps_curl_warning');
 
         return;
-    } else if (@$_GET['page'] != 'pps_settings' && (get_option('pps_appID') == null || get_option('pps_restApi') == null)) {
+    } else if (@$_GET['page'] != 'pps_settings' && (get_option('pps_appID') == null || get_option('pps_parseUrl') == null)) {
 
         function pps_appname_warning() {
             echo "<div id='pps-warning' class='updated fade'><p><strong>" . __("Parse Push Service plugin needs to be configured.", 'pps_context') . "</strong> " . sprintf(__('Please go to <a href="%s">Parse Push Service admin menu</a> to configure your Parse Account keys.', 'pps_context'), get_bloginfo('url') . '/wp-admin/admin.php?page=pps_settings') . "</p></div>";

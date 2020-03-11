@@ -53,6 +53,7 @@ function pps_admin_init() {
         }
 
         add_action('wp_ajax_pps_push_notification', 'pps_send_post_push_notification');
+        add_action('wp_ajax_nopriv_pps_push_notification', 'pps_send_post_push_notification');
     }
 }
 
@@ -131,7 +132,7 @@ function pps_send_post_push_notification() {
     $post_id = @$_POST['post_id'];
 
     if(isset($guid) && class_exists('OcUtilities')) {
-        $post_id = OcUtilities::get_article_post_id_by_uuid($uuid);
+        $post_id = OcUtilities::get_article_post_id_by_uuid($guid);
     }
 
     if (is_numeric($post_id)) {

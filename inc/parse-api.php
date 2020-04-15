@@ -61,7 +61,7 @@ function pps_send_push_notification($message, $channels = array(""))
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	$result = curl_exec($curl);
 	if ($result === FALSE) {
-		die(curl_error($curl));
+		$result = curl_error($curl);
 	}
 	curl_close($curl);
 

@@ -51,9 +51,6 @@ function pps_admin_init() {
                 get_option('pps_metaBoxPriority', 'default')
             );
         }
-
-        add_action('wp_ajax_pps_push_notification', 'pps_send_post_push_notification');
-        add_action('wp_ajax_nopriv_pps_push_notification', 'pps_send_post_push_notification');
     }
 }
 
@@ -135,10 +132,11 @@ function pps_send_post_push_notification() {
         $post_id = OcUtilities::get_article_post_id_by_uuid($guid);
     }
 
-    if (is_numeric($post_id)) {
+    $status = get_post_status($post_id);
 
-        $status = get_post_status($post_id);
-
+    if (FALSE === $status) {
+        wp_send_json_error("Article not found", 404);
+    } else {
         // TODO FIX HERE
         // escape unescape
         $alert = @$_POST['message'];
@@ -153,7 +151,12 @@ function pps_send_post_push_notification() {
 
         if ($status == 'publish') {
             include('inc/parse-api.php');
-            echo pps_send_post_notification($post_id, $alert, $channels);
+            $result = pps_send_post_notification($post_id, $alert, $channels);
+            if($result === TRUE) {
+                wp_send_json("ok");
+            } else {
+                wp_send_json_error($result, 500);
+            }
         } else if ($status == 'future') {
             add_post_meta($post_id, '_pps_future_notification', 1, true);
 
@@ -169,8 +172,11 @@ function pps_send_post_push_notification() {
         }
     }
 
-    wp_die();
+    exit;
 }
+
+add_action('wp_ajax_pps_push_notification', 'pps_send_post_push_notification');
+add_action('wp_ajax_nopriv_pps_push_notification', 'pps_send_post_push_notification');
 
 //////////////////////////
 // admin, settings menu //

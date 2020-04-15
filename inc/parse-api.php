@@ -13,12 +13,17 @@ function pps_send_post_notification($post_id, $alert = '', $channels = array()) 
 		$channels = array_values(array_unique($all_categories));
 	}
 	if(!empty($alert)) {
-		add_post_meta($post_id, '_pps_future_notification_timestamp', current_time( 'mysql' ), true);
-		return pps_send_push_notification(array(
+		$timestamp = current_time( 'mysql' );
+		$result = pps_send_push_notification(array(
 			'alert' => $alert,
 			'badge' => 0,
 			'url' => get_permalink($post_id)
 		), $channels);
+
+		if(!add_post_meta($post_id, '_pps_future_notification_timestamp', $timestamp, true)) {
+			update_post_meta($post_id, '_pps_future_notification_timestamp', $timestamp);
+		}
+		return $result;
 	}
 	return false;
 }

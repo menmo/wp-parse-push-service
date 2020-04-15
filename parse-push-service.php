@@ -252,8 +252,3 @@ add_action( 'wp_ajax_pps_push_timestamp', 'pps_push_timestamp' );
 add_action( 'wp_ajax_nopriv_pps_push_timestamp', 'pps_push_timestamp' );
 
 ?>
-
-{
-	"name": "SKD Stage",
-	"parsePluginHost": "https://everywarestarterkit.local"
-}

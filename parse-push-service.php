@@ -225,6 +225,21 @@ function pps_categories_callback() {
     exit;
 }
 
+function pps_push_timestamp() {
+    $guid = @$_GET['guid'];
+    $post_id = @$_GET['post_id'];
+
+    if(isset($guid) && class_exists('OcUtilities')) {
+        $post_id = OcUtilities::get_article_post_id_by_uuid($guid);
+    }
+
+    $timestamp = get_post_meta($post_id, '_pps_future_notification_timestamp', true);
+
+    echo json_encode($timestamp);
+
+    exit;
+}
+
 ////////////////////////
 // register functions //
 ////////////////////////
@@ -233,5 +248,12 @@ add_action('admin_menu', 'pps_admin_actions');
 add_action('publish_future_post', 'pps_publish_future_post');
 add_action( 'wp_ajax_pps_categories', 'pps_categories_callback' );
 add_action( 'wp_ajax_nopriv_pps_categories', 'pps_categories_callback' );
+add_action( 'wp_ajax_pps_push_timestamp', 'pps_push_timestamp' );
+add_action( 'wp_ajax_nopriv_pps_push_timestamp', 'pps_push_timestamp' );
 
 ?>
+
+{
+	"name": "SKD Stage",
+	"parsePluginHost": "https://everywarestarterkit.local"
+}

@@ -57,7 +57,6 @@ function pps_send_push_notification($message, $channels = array(""))
 	curl_setopt($curl, CURLOPT_POST, 1);
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $_data);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	$result = curl_exec($curl);
 	if ($result === FALSE) {
